@@ -7,7 +7,6 @@ import myProbotApp from '../src'
 import { Probot } from 'probot'
 // Requiring our fixtures
 import payload from './fixtures/issues.opened.json'
-const issueCreatedBody = { body: 'Thanks for opening this issue!' }
 const fs = require('fs')
 const path = require('path')
 
@@ -31,16 +30,21 @@ describe('My Probot app', () => {
     probot.load(myProbotApp)
   })
 
-  test('creates a comment when an issue is opened', async (done) => {
-    // Test that we correctly return a test token
-    nock('https://api.github.com')
-      .post('/app/installations/2/access_tokens')
-      .reply(200, { token: 'test' })
+  test('creates a comment when an issue is opened', async done => {
+    const addComment = `
+      mutation comment($id: ID!, $body: String!) {
+        addComment(input: {subjectId: $id, body: $body}) {
+          clientMutationId
+        }
+      }
+    `
 
     // Test that a commented is posted
     nock('https://api.github.com')
-      .post('/repos/hiimbex/testing-things/issues/1/comments', (body: any) => {
-        done(expect(body).toMatchObject(issueCreatedBody))
+      .post('/graphql', (body: any) => {
+        expect(body.query.trim).toBe(addComment.trim)
+        expect(body.variables).toMatchObject({ body: 'Hello World' })
+        done()
         return true
       })
       .reply(200)
