@@ -17,7 +17,7 @@ describe('My Probot app', () => {
   beforeEach(() => {
     probot = new Probot({ id: 123, githubToken: 'test' })
     // Load our app into probot
-    const app = probot.load(myProbotApp)
+    probot.load(myProbotApp)
   })
 
   test('creates a passing check', async () => {
