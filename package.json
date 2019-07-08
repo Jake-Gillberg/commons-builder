@@ -13,7 +13,8 @@
     "probot-app"
   ],
   "scripts": {
-    "apollo-generate": "apollo client:download-schema src/generated/apollo/github-schema.json --endpoint https://api.github.com/graphql --header \"authorization: Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN_APOLLO}\"",
+    "apollo-codegen": "apollo client:codegen src/generated/apollo/ --endpoint https://api.github.com/graphql --header \"authorization: Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN_APOLLO}\" --target typescript --outputFlat",
+    "apollo-download-schema": "apollo client:download-schema src/generated/apollo/github-schema.json --endpoint https://api.github.com/graphql --header \"authorization: Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN_APOLLO}\"",
     "build": "tsc -p tsconfig.json",
     "dev": "nodemon --exec \"npm start\"",
     "lint": "standard **/*.ts --fix",
